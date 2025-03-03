@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/02 11:50:28 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/03 08:53:44 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ long get_the_current()
     return ((tv.tv_sec * 1000000) + tv.tv_usec);
 }
 
-void destory(t_philos *p, t_fork *forks, int numbers)
+void destory(t_philos *p, int numbers)
 {
     int i;
 
     i = 0;
     while (i < numbers)
     {
-        pthread_mutex_destroy(&forks[i].forks);
+        pthread_mutex_destroy(&p->table->array_of_fork[i]);
         pthread_mutex_destroy(&p->meal);
         i++;
     }
@@ -62,8 +62,7 @@ void join_threads(t_table *table)
         pthread_join(table->philos[i].treads, NULL);
         i++;
     }
-    pthread_join(table->tabel_thread,NULL);
-    
+    pthread_detach(table->tabel_thread);
 }
 
 void create_pthread(t_philos *phil)

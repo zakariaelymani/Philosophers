@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:58:25 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/02 11:41:36 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/03 11:02:03 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,69 +16,38 @@
 monitor to check is all philos is eating or some of them is die or 
 os this will sparated thread  and joine that after this join the other 
 */
-void *monitor(void *t)
+void print_struct(t_philos *t)
 {
-    t_table *table = (t_table *)t;
-    int i;
-    long time_since_last_meal;
+	int  i = 0;
+	// printf("this time to 5eating %ld \n", t->table->time_of_eat);
+	// printf("time to4 die %ld \n", t->table->time_of_die);
+	// printf("time to4 seelp %ld\n", t->table->time_of_sleep);
+	// printf("numbe of 4filo sofu %d\n", t->table->number_of_philos);
+	// printf("the number 5of meals %ld \n", t->table->the_number_of_meals);
+	while (i < t->table->number_of_philos)
+	{
+		printf("this is counter %d \n", t[i].counter);
+		printf(" this is the id of filo %d\n ", t[i].the_philo_id);
+		printf(" this left frok %d \n", t[i].left_frok);
+		printf(" this right frok %d \n", t[i].right_frok);
+		printf("time of %ld eating \n",  t[i].table->time_of_eat);
+		i++;
+	}
 
-    while(table->similation_runing)
-    {
-        i = 0;
-        while (i < table->number_of_philos)
-        {
-            pthread_mutex_lock(&table->meal_lock);
-            time_since_last_meal = get_the_current() - table->philos[i].the_last_meal;
-            pthread_mutex_unlock(&table->meal_lock);
-            if (table->time_of_die < time_since_last_meal)
-            {
-                pthread_mutex_lock(&table->print_die);
-                printf("the philos id %d die\n", table->philos[i].the_philo_id);
-                pthread_mutex_unlock(&table->print_die);
-                table->similation_runing = 0;
-            }
-            else if (check_all_eating(table) == 1)
-                table->similation_runing = 0;
-            i++;
-        }
-    }
-    return (NULL);
+	
 }
 
-
-void *routine(void *t)
+int main(int argc, char *arg[])
 {
-    t_philos *philos = (t_philos *)t;
-    while (philos->table->similation_runing)
-    {
-        pthread_mutex_lock(&philos->table->array_of_fork[philos->right_frok].forks);
-        printf("the philos %d take fork\n", philos->the_philo_id);
-        pthread_mutex_lock(&philos->table->array_of_fork[philos->left_frok].forks);
-        printf("the philos %d take fork\n", philos->the_philo_id);
-        pthread_mutex_lock(&philos->meal);
-        philos->the_last_meal = get_the_current();
-        pthread_mutex_unlock(&philos->meal);
-        printf("the philos id %d is eating \n", philos->the_philo_id);
-        philos->counter++;
-        usleep(philos->table->time_of_eat * 1000);
-        pthread_mutex_unlock(&philos->table->array_of_fork[philos->right_frok].forks);
-        pthread_mutex_unlock(&philos->table->array_of_fork[philos->left_frok].forks);
-        printf("the philos id %d is sleeping\n", philos->the_philo_id);
-        usleep(philos->table->time_of_sleep * 1000);
-        printf("the philos id %d is thinking\n", philos->the_philo_id);        
-    }
-    return (NULL);
-}
-
-
-int main()
-{
-    t_table *table = malloc(sizeof(t_table) * 1);
-    t_fork *forks = malloc(sizeof(t_fork) * 2);
-    t_philos *phils = malloc(sizeof(t_philos) * 2);
-    init(2, phils, forks, table);
-    fill_struct(table,phils,forks);
-    create_pthread(table);
-    join_threads(table);
-    destory(phils, forks, table->number_of_philos);
+	t_table *table;
+	t_philos *phils;
+	
+	table = NULL;
+	phils = NULL;
+	fill_struct(&table,&phils, arg, argc);
+	init_struct(table->number_of_philos, phils, table);
+	//print_struct(table);
+	// create_pthread(phils);
+	// join_threads(table);
+	// destory(phils,table->number_of_philos);
 }
