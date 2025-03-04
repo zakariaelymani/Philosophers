@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:44:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/03 09:31:16 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:28:03 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,19 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-void print(char *s, int id, long simli_time)
+void	print(char *s, int id, long long start)
 {
-	long	current_time;
+	long long	current_time;
 
-	current_time = get_the_current() - simli_time;
-	printf("the philo %d at time %ld : %s",id, current_time, s);
+	current_time = (get_the_current(MAIL) - start);
+	//printf("thie current time %lld and this is the time of start %lld\n", current_time, start);
+	printf("the philo %d at %lld : %s\n",id, current_time, s);
+}
+
+void error_exit(char *s)
+{
+    ft_putstr_fd(s, 2);
+    ft_free(NULL, 1);
+    exit(1);
+    
 }

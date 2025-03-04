@@ -6,13 +6,11 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:10:59 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/03 08:25:52 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:27:14 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-
 
 
 void *routine(void *t)
@@ -25,15 +23,15 @@ void *routine(void *t)
 		pthread_mutex_unlock(&philos->table->array_of_fork[philos->left_frok]);
 		print("take left fork\n", philos->the_philo_id, philos->table->sesstion_start);
 		pthread_mutex_lock(&philos->meal);
-		philos->the_last_meal = get_the_current();
+		philos->the_last_meal = get_the_current(MICRO);
 		pthread_mutex_unlock(&philos->meal);
 		print("is eating\n", philos->the_philo_id, philos->table->sesstion_start);
 		philos->counter++;
-		usleep(philos->table->time_of_eat );
+		prcise_usleep(philos->table->time_of_eat * 1000);
 		pthread_mutex_unlock(&philos->table->array_of_fork[philos->right_frok]);
 		pthread_mutex_unlock(&philos->table->array_of_fork[philos->left_frok]);
 		print("is sleeping\n", philos->the_philo_id, philos->table->sesstion_start);
-		usleep(philos->table->time_of_sleep);
+		prcise_usleep(philos->table->time_of_sleep * 1000);
 		print("is thinking\n", philos->the_philo_id, philos->table->sesstion_start);     
 	}
 	return (NULL);
@@ -51,17 +49,22 @@ void *monitor(void *t)
 		while (i < table->number_of_philos)
 		{
 			pthread_mutex_lock(&table->meal_lock);
-			time_since_last_meal = get_the_current() - table->philos[i].the_last_meal;
+			time_since_last_meal = get_the_current(MICRO) - table->philos[i].the_last_meal;
 			pthread_mutex_unlock(&table->meal_lock);
-			if (table->time_of_die < time_since_last_meal)
+			if ((table->time_of_die * 1000) < time_since_last_meal)
 			{
 				pthread_mutex_lock(&table->print_die);
-				printf("the philos id %d die\n", table->philos[i].the_philo_id);
+				print("the philo die", table->philos[i].the_philo_id, table->sesstion_start);
 				pthread_mutex_unlock(&table->print_die);
 				table->similation_runing = 0;
+				break;
 			}
 			else if (check_all_eating(table) == 1)
+			{
+				printf("--here 999");
 				table->similation_runing = 0;
+				break;
+			}
 			i++;
 		}
 	}

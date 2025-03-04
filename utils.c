@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/03 08:53:44 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/04 14:30:53 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,28 @@ int check_all_eating(t_table *t)
     return (0);
 }
 
-long get_the_current()
+void prcise_usleep(long time_wait)
+{
+    long long start;
+    
+    start = get_the_current(MICRO);
+    while ((start - get_the_current(MICRO)) < time_wait)
+    {
+       usleep(300);
+    }
+}
+
+
+
+long long get_the_current(t_time time)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    return ((tv.tv_sec * 1000000) + tv.tv_usec);
+    if (time == MAIL)
+        return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+    else if (time == MICRO)
+        return ((tv.tv_sec * 1000000) + tv.tv_usec);
+    return (tv.tv_sec + (tv.tv_usec / 1e6));
 }
 
 void destory(t_philos *p, int numbers)
@@ -62,18 +79,5 @@ void join_threads(t_table *table)
         pthread_join(table->philos[i].treads, NULL);
         i++;
     }
-    pthread_detach(table->tabel_thread);
-}
-
-void create_pthread(t_philos *phil)
-{
-    int i;
-
-    i = 0;
-    while(i < phil->table->number_of_philos)
-    {
-        pthread_create(&phil[i].treads, NULL, routine, (void *)phil[i].table->philos);
-        i++;
-    }
-    pthread_create(&phil->table->tabel_thread,NULL, monitor, (void *)phil->table);
+    pthread_join(table->tabel_thread, NULL);
 }
