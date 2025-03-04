@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 17:50:49 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/04 14:16:47 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:37:28 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ typedef struct s_philos
 	int				counter;
 	struct s_table *table;
 }   t_philos;
+typedef enum s_thread
+{
+	INIT,
+	LOCK,
+	UNLOCK,
+	JOIN,
+	CREATE,
+	DESTROY,
+	DETACH,
+} t_thread;	
 
 typedef enum s_time
 {
@@ -70,3 +80,5 @@ void		ft_free(void *ptr, int flag);
 void		print(char *s, int id, long long start);
 void		error_exit(char *s);
 void		prcise_usleep(long time_wait);
+void		manage_locks(t_thread thread, pthread_mutex_t mtx);
+void		creat_threads(pthread_t t, void*fucn(void *), void *argument ,t_thread enm);

@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/04 14:30:53 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:38:58 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,16 @@ void destory(t_philos *p, int numbers)
     i = 0;
     while (i < numbers)
     {
-        pthread_mutex_destroy(&p->table->array_of_fork[i]);
-        pthread_mutex_destroy(&p->meal);
+        manage_locks(DESTROY, p->table->array_of_fork[i]);
         i++;
     }
-    pthread_mutex_destroy(&p->table->meal_lock);   
+    i = 0;
+    while (i < numbers)
+    {
+        manage_locks(DESTROY, p[i].meal);
+        i++;
+    }
+    manage_locks(DESTROY, p->table->meal_lock);
 }
 
 void join_threads(t_table *table)
@@ -76,8 +81,9 @@ void join_threads(t_table *table)
     i = 0;
     while (i < table->number_of_philos)
     {
-        pthread_join(table->philos[i].treads, NULL);
+        creat_threads(table->philos[i].treads, NULL, NULL, JOIN);
         i++;
     }
-    pthread_join(table->tabel_thread, NULL);
+
+    creat_threads(table->tabel_thread, NULL, NULL, JOIN);
 }
