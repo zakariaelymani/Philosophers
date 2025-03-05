@@ -12,27 +12,52 @@
 
 #include "philo.h"
 
+// void manage_locks(t_thread thread, pthread_mutex_t mtx)
+// {
+// 	if (thread == LOCK)
+// 	{
+// 		if (pthread_mutex_lock(&mtx) != 0)
+// 			error_exit("error in lock mutex lock \n");
+// 	}
+// 	else if (thread  == UNLOCK)
+// 	{
+// 		if (pthread_mutex_unlock(&mtx) != 0)
+// 			error_exit("error in unlock mutex unclock \n");
+// 	}
+// 	else if (thread == INIT)
+// 	{
+// 		if (pthread_mutex_init(&mtx, NULL) != 0)
+// 			error_exit("error in init mutex init \n");
+// 	}
+// 	else if (thread == DESTROY)
+// 	{
+// 		if (pthread_mutex_destroy(&mtx ) != 0)
+// 			error_exit("error in destroy mutex destroy \n");
+// 	}
+// 	else
+// 		error_exit("error input to manage locks \n");
+		
+// }
 void manage_locks(t_thread thread, pthread_mutex_t mtx)
 {
 	if (thread == LOCK)
 	{
-		if (pthread_mutex_lock(&mtx) != 0)
-			error_exit("error in lock mutex \n");
+		pthread_mutex_lock(&mtx) ;
+			
 	}
-	if (thread  == UNLOCK)
+	else if (thread  == UNLOCK)
 	{
-		if (pthread_mutex_unlock(&mtx) != 0)
-			error_exit("error in unlock mutex \n");
+		pthread_mutex_unlock(&mtx) ;
+		
 	}
-	if (thread == INIT)
+	else if (thread == INIT)
 	{
-		if (pthread_mutex_init(&mtx, NULL) != 0)
-			error_exit("error in init mutex \n");
+		pthread_mutex_init(&mtx, NULL) ;
+			
 	}
-	if (thread == DESTROY)
+	else if (thread == DESTROY)
 	{
-		if (pthread_mutex_destroy(&mtx ) != 0)
-			error_exit("error in destroy mutex \n");
+		pthread_mutex_destroy(&mtx );
 	}
 	else
 		error_exit("error input to manage locks \n");

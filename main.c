@@ -42,7 +42,8 @@ int main(int argc, char *arg[])
 	fill_struct(&table,&phils, arg, argc);
 	init_struct(table->number_of_philos, &phils, table);
 	//print_struct(table);
-	 create_pthread(phils); //this the hard part in my code 
+	create_pthread(phils); //this the hard part in my code 
+
 	join_threads(table);
-	 destory(phils,table->number_of_philos);
+	destory(phils,table->number_of_philos);
 }

@@ -1,7 +1,7 @@
 NAME = philo
 FILES = main.c  utils.c filler_and_init.c garbagecollecter.c parsing.c print_file.c task.c
 header =  philo.h 
-FLAGES = -Wall -Werror -Wextra -pthread
+FLAGES = -Wall -Werror -Wextra -pthread -fsanitize=address
 cc = cc
 OBJ = $(FILES:.c=.o)
 RM = rm -rf

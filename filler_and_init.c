@@ -14,15 +14,15 @@
 
 void creat_threads(pthread_t t, void*fucn(void *), void *argument ,t_thread enm)
 {
-    if (enm =  CREATE)
+    if (enm == CREATE)
     {
-        if (pthread_create(&t, NULL, fucn, argument) != 0)
-            error_exit("error in creat threads \n");
+        pthread_create(&t, NULL, fucn, argument) ;
+            //error_exit("error in create threads \n");
     }
-    else if (enm = JOIN)
+    else if (enm == JOIN)
     {
-        if (pthread_join(t,NULL) != 0)
-            error_exit("error in join threads \n");
+        pthread_join(t,NULL) ;
+            //error_exit("error in join threads \n");
     }
     
     
@@ -33,12 +33,14 @@ void create_pthread(t_philos *phil)
     int i;
 
     i = 0;
-    phil->table->sesstion_start = get_the_current(MAIL);
+   
     while(i < phil->table->number_of_philos)
     {
         creat_threads(phil[i].treads, routine, (void *)phil[i].table->philos, CREATE);
         i++;
     }
+    phil->table->sesstion_start = get_the_current(MAIL);
+    
     creat_threads(phil->table->tabel_thread, monitor,(void *)phil->table, CREATE);
 }
 
@@ -73,7 +75,7 @@ void    init_struct(int numbs, t_philos **philos, t_table *table)
 void fill_struct(t_table **table, t_philos **p, char **args, int argc)
 {
     if (argc != 5 && argc != 6)
-        error_exit("invalid arguments");
+        error_exit("invalid arguments \n");
 
     *table = (t_table *)ft_malloc(sizeof(t_table));
     (*table)->similation_runing = 1;

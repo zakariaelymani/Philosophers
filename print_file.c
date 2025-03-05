@@ -37,8 +37,13 @@ void	print(char *s, int id, long long start)
 
 void error_exit(char *s)
 {
+	pthread_mutex_t lock;
+
+	pthread_mutex_init(&lock, NULL);
+	manage_locks(LOCK, lock);
     ft_putstr_fd(s, 2);
-    ft_free(NULL, 1);
-    exit(1);
+	exit(1);
+	manage_locks(UNLOCK, lock);
+    
     
 }
