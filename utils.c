@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/04 16:38:58 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/09 11:49:52 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ int check_all_eating(t_table *t)
     int i;
 
     i = 0;
-    if (t->the_number_of_meals)
+    if (t->number_meals)
     {
         while(i < t->number_of_philos)
         {
-            if (t->the_number_of_meals != t->philos[i].counter)
+            if (t->number_meals != t->philos[i].counter)
             {
                 return (0);
             }
@@ -56,34 +56,4 @@ long long get_the_current(t_time time)
     return (tv.tv_sec + (tv.tv_usec / 1e6));
 }
 
-void destory(t_philos *p, int numbers)
-{
-    int i;
 
-    i = 0;
-    while (i < numbers)
-    {
-        manage_locks(DESTROY, p->table->array_of_fork[i]);
-        i++;
-    }
-    i = 0;
-    while (i < numbers)
-    {
-        manage_locks(DESTROY, p[i].meal);
-        i++;
-    }
-    manage_locks(DESTROY, p->table->meal_lock);
-}
-
-void join_threads(t_table *table)
-{
-    int i;
-    i = 0;
-    while (i < table->number_of_philos)
-    {
-        creat_threads(table->philos[i].treads, NULL, NULL, JOIN);
-        i++;
-    }
-
-    creat_threads(table->tabel_thread, NULL, NULL, JOIN);
-}

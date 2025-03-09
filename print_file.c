@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:44:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/04 14:28:03 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/09 11:21:57 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,12 @@ void	print(char *s, int id, long long start)
 	printf("the philo %d at %lld : %s\n",id, current_time, s);
 }
 
-void error_exit(char *s)
-{
-	pthread_mutex_t lock;
 
-	pthread_mutex_init(&lock, NULL);
-	manage_locks(LOCK, lock);
-    ft_putstr_fd(s, 2);
-	exit(1);
-	manage_locks(UNLOCK, lock);
+
+	
+
+
+    
+	
     
     
-}

@@ -1,5 +1,5 @@
 NAME = philo
-FILES = main.c  utils.c filler_and_init.c garbagecollecter.c parsing.c print_file.c task.c
+FILES = main.c  utils.c filler_and_init.c parsing.c print_file.c task.c
 header =  philo.h 
 FLAGES = -Wall -Werror -Wextra -pthread -fsanitize=address
 cc = cc

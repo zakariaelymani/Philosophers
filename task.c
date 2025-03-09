@@ -6,117 +6,87 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:10:59 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/04 16:53:57 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/09 14:51:07 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// void manage_locks(t_thread thread, pthread_mutex_t mtx)
-// {
-// 	if (thread == LOCK)
-// 	{
-// 		if (pthread_mutex_lock(&mtx) != 0)
-// 			error_exit("error in lock mutex lock \n");
-// 	}
-// 	else if (thread  == UNLOCK)
-// 	{
-// 		if (pthread_mutex_unlock(&mtx) != 0)
-// 			error_exit("error in unlock mutex unclock \n");
-// 	}
-// 	else if (thread == INIT)
-// 	{
-// 		if (pthread_mutex_init(&mtx, NULL) != 0)
-// 			error_exit("error in init mutex init \n");
-// 	}
-// 	else if (thread == DESTROY)
-// 	{
-// 		if (pthread_mutex_destroy(&mtx ) != 0)
-// 			error_exit("error in destroy mutex destroy \n");
-// 	}
-// 	else
-// 		error_exit("error input to manage locks \n");
-		
-// }
-void manage_locks(t_thread thread, pthread_mutex_t mtx)
+void eating(t_philos *p, t_table *t)
 {
-	if (thread == LOCK)
+	pthread_mutex_lock(&t->array_of_f[p->right_f]);
+	print("take right fork", p->philo_id, t->sesstion_start);
+	if (t->number_of_philos == 1)
 	{
-		pthread_mutex_lock(&mtx) ;
-			
+		prcise_usleep(t->time_of_die * 1000);
+		pthread_mutex_unlock(&t->array_of_f[p->right_f]);
+		t->similation_runing = 0;
+		return ;
 	}
-	else if (thread  == UNLOCK)
-	{
-		pthread_mutex_unlock(&mtx) ;
-		
-	}
-	else if (thread == INIT)
-	{
-		pthread_mutex_init(&mtx, NULL) ;
-			
-	}
-	else if (thread == DESTROY)
-	{
-		pthread_mutex_destroy(&mtx );
-	}
-	else
-		error_exit("error input to manage locks \n");
-		
+	pthread_mutex_lock(&t->array_of_f[p->left_f]);
+	print("take left fork", p->philo_id, t->sesstion_start);
+	pthread_mutex_lock(&t->meal_lock);
+	p->last_meal = get_the_current(MAIL);
+	p->counter++;
+	pthread_mutex_unlock(&t->meal_lock);
+	print("is eating", p->philo_id, t->sesstion_start);
+	prcise_usleep(t->time_of_eat * 1000);
+	pthread_mutex_unlock(&t->array_of_f[p->left_f]);
+	pthread_mutex_unlock(&t->array_of_f[p->right_f]);
 }
 
-void *routine(void *t)
+void seelping(t_philos *p, t_table *t)
 {
-	t_philos *philos = (t_philos *)t;
-	while (philos->table->similation_runing)
+	print("is sleeping", p->philo_id, t->sesstion_start);
+	prcise_usleep(t->time_of_sleep * 1000);
+	print("is thinking", p->philo_id, t->sesstion_start);
+}
+
+void *routine(void *philos)
+{
+	t_philos *p;
+	t_table *t;
+	long long since_last_meal;
+	
+	p = (t_philos *)philos;
+	t = p->table;
+	if(p->philo_id % 2 == 0)
+		usleep(3333);
+	while (t->similation_runing == 1)
 	{
-		manage_locks(LOCK, philos->table->array_of_fork[philos->right_frok]);
-		print("take right fork\n", philos->the_philo_id, philos->table->sesstion_start);
-		manage_locks(LOCK, philos->table->array_of_fork[philos->left_frok]);
-		print("take left fork\n", philos->the_philo_id, philos->table->sesstion_start);
-		manage_locks(LOCK,philos->meal);
-		philos->the_last_meal = get_the_current(MICRO);
-		manage_locks(UNLOCK,philos->meal);
-		print("is eating\n", philos->the_philo_id, philos->table->sesstion_start);
-		philos->counter++;
-		prcise_usleep(philos->table->time_of_eat * 1000);
-		manage_locks(UNLOCK, philos->table->array_of_fork[philos->right_frok]);
-		manage_locks(UNLOCK, philos->table->array_of_fork[philos->left_frok]);
-		print("is sleeping\n", philos->the_philo_id, philos->table->sesstion_start);
-		prcise_usleep(philos->table->time_of_sleep * 1000);
-		print("is thinking\n", philos->the_philo_id, philos->table->sesstion_start);     
+		since_last_meal = get_the_current(MAIL) - p->last_meal;
+		if (since_last_meal >= t->time_of_die);
+			return ;
+		if ( p->counter < t->number_meals) //check is that phils is reach dead point or he is will or he is full or 
+			eating(p, t);
+		else 
+			seelping(p, t);
+		
 	}
 	return (NULL);
 }
 
-void *monitor(void *t)
+void monitor(t_philos *p, t_table *t)
 {
-	t_table *table = (t_table *)t;
 	int i;
-	long time_since_last_meal;
+	long long since_last;
 
-	while(table->similation_runing)
+	while (t->similation_runing == 1)
 	{
 		i = 0;
-		while (i < table->number_of_philos)
+		while (i < t->number_of_philos)
 		{
-			manage_locks(LOCK, table->meal_lock);
-			time_since_last_meal = get_the_current(MICRO) - table->philos[i].the_last_meal;
-			manage_locks(UNLOCK, table->meal_lock);
-			if ((table->time_of_die * 1000) < time_since_last_meal)
+			since_last = get_the_current(MAIL) - p[i].last_meal;
+			if (since_last >= t->time_of_die)
 			{
-				manage_locks(LOCK, table->print_die);
-				print("the philo die", table->philos[i].the_philo_id, table->sesstion_start);
-				manage_locks(UNLOCK, table->print_die);
-				table->similation_runing = 0;
-				return (NULL);
-			}
-			else if (check_all_eating(table) == 1)
-			{
-				table->similation_runing = 0;
-				return (NULL);
+				print("is deing", p[i].philo_id, t->sesstion_start);
+				t->similation_runing = 0;
+				return ;
 			}
 			i++;
 		}
-	}
-	return (NULL);
+		if (check_all_eating(t) == 1)
+			return ;
+		usleep(1000);
+		}
 }
