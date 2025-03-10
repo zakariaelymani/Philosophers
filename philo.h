@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 17:50:49 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/10 15:36:25 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:58:55 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,12 @@ typedef struct s_table
 
 void		print_struct(t_table *t);
 long long	get_the_current(t_time time);
-int			check_all_eating(t_table *t);
 long		ft_atoi(const char *str);
 int			ft_isdigit(int c);
 void		ft_putstr_fd(char *s, int fd);
-void		print(char *s, int id, long long start);
+void		print(char *s, t_philos *p, long long start);
 void 		fill_philos(t_philos *p, t_table *t);
-void		prcise_usleep(long time_wait);
+void		prcise_usleep(long time_wait, t_philos *p);
 int			fill_table(t_table *table,char **args, int argc);
 void 		*routine(void *philos);
 void		eating(t_philos *p, t_table *t);

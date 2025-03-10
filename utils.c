@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/10 15:27:54 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:57:30 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ void prcise_usleep(long time_wait, t_philos *p)
     start = get_the_current(MICRO);
     while ((start - get_the_current(MICRO)) < time_wait)
     {
-       usleep(300);
+        if (p->table->full || p->table->death)
+            break;
+        usleep(100);
     }
 }
 
