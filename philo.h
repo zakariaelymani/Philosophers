@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 17:50:49 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/09 14:27:19 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:36:25 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,16 @@ typedef enum s_time
 typedef struct s_table
 {
 	pthread_t		tabel_thread;
-	int				similation_runing;
+	int				death;
 	int         	number_of_philos;
 	t_philos		*philos;
 	long long		sesstion_start;
 	pthread_mutex_t	array_of_f[200];
 	pthread_mutex_t	meal_lock;
+	pthread_mutex_t check_death;
+	pthread_mutex_t	print;
+	pthread_mutex_t	start;
+	int 			full;
 	int				number_meals;
 	long			time_of_eat;
 	long			time_of_die;

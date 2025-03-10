@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:44:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/09 11:21:57 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:36:42 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,17 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-void	print(char *s, int id, long long start)
+void	print(char *s, t_philos *p, long long start)
 {
 	long long	current_time;
 
-	current_time = (get_the_current(MAIL) - start);
-	//printf("thie current time %lld and this is the time of start %lld\n", current_time, start);
-	printf("the philo %d at %lld : %s\n",id, current_time, s);
+	pthread_mutex_lock(&p->table->print);
+	if (!p->table->death && !p->table->full)
+	{
+		current_time = (get_the_current(MAIL) - start);
+		printf("the philo %d at %lld : %s\n",p->philo_id, current_time, s);
+	}
+	pthread_mutex_unlock(&p->table->print);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:10:59 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/09 14:51:07 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:48:10 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void eating(t_philos *p, t_table *t)
 	{
 		prcise_usleep(t->time_of_die * 1000);
 		pthread_mutex_unlock(&t->array_of_f[p->right_f]);
-		t->similation_runing = 0;
+		t->death = 0;
 		return ;
 	}
 	pthread_mutex_lock(&t->array_of_f[p->left_f]);
@@ -52,16 +52,10 @@ void *routine(void *philos)
 	t = p->table;
 	if(p->philo_id % 2 == 0)
 		usleep(3333);
-	while (t->similation_runing == 1)
+	while (!t->death && !t->full)
 	{
-		since_last_meal = get_the_current(MAIL) - p->last_meal;
-		if (since_last_meal >= t->time_of_die);
-			return ;
-		if ( p->counter < t->number_meals) //check is that phils is reach dead point or he is will or he is full or 
 			eating(p, t);
-		else 
 			seelping(p, t);
-		
 	}
 	return (NULL);
 }
@@ -71,7 +65,7 @@ void monitor(t_philos *p, t_table *t)
 	int i;
 	long long since_last;
 
-	while (t->similation_runing == 1)
+	while (!t->death && !t->full)
 	{
 		i = 0;
 		while (i < t->number_of_philos)
@@ -80,13 +74,16 @@ void monitor(t_philos *p, t_table *t)
 			if (since_last >= t->time_of_die)
 			{
 				print("is deing", p[i].philo_id, t->sesstion_start);
-				t->similation_runing = 0;
-				return ;
+				t->death = 1;
 			}
+			usleep(100);
 			i++;
 		}
-		if (check_all_eating(t) == 1)
-			return ;
+		i = 0;
+		while (t->number_meals != 0 && i < t->number_of_philos && t->number_meals <= t->philos[i].counter)
+			i++;
+		if (i == t->number_of_philos)
+			t->full = 1;
 		usleep(1000);
 		}
 }

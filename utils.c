@@ -6,35 +6,17 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/09 11:49:52 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:27:54 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int check_all_eating(t_table *t)
-{
-    int i;
 
-    i = 0;
-    if (t->number_meals)
-    {
-        while(i < t->number_of_philos)
-        {
-            if (t->number_meals != t->philos[i].counter)
-            {
-                return (0);
-            }
-            i++;
-        }
-        return (1);
-    }
-    return (0);
-}
-
-void prcise_usleep(long time_wait)
+void prcise_usleep(long time_wait, t_philos *p)
 {
     long long start;
+    
     
     start = get_the_current(MICRO);
     while ((start - get_the_current(MICRO)) < time_wait)
