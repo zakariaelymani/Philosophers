@@ -49,7 +49,7 @@ void *routine(void *philos)
 	
 	p = (t_philos *)philos;
 	t = p->table;
-	if(p->philo_id % 2 == 0)
+	if (p->philo_id % 2 == 0)
 		usleep(1000);
 
 	while (!t->death && !t->full)
@@ -62,8 +62,8 @@ void *routine(void *philos)
 
 void monitor(t_philos *p, t_table *t)
 {
-	int i;
-	long long since_last;
+	int			i;
+	long long	since_last;
 
 	while (!t->death && !t->full)
 	{
@@ -78,13 +78,11 @@ void monitor(t_philos *p, t_table *t)
 				t->death = 1;
 			}
 			pthread_mutex_unlock(&t->check_death);
-			usleep(1000);
-			i++;
+			(1) && (usleep(1000) ,i++);
 		}
-		i = 0;
-		while (t->number_meals != 0 && i < t->number_of_philos 
+		i = -1;
+		while (t->number_meals != 0 && ++i < t->number_of_philos 
 			&& t->number_meals <= t->philos[i].counter)
-			i++;
 		if (i == t->number_of_philos)
 			t->full = 1;
 		}

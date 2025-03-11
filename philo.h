@@ -10,12 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <pthread.h>
-#include <stdio.h>
-#include <sys/time.h>
-#include <stdlib.h>
-#include <limits.h>
+#ifndef PHILO_H
+# define PHILO_H
+
+# include <unistd.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <sys/time.h>
+# include <stdlib.h>
+# include <limits.h>
 
 typedef struct s_philos
 {
@@ -54,7 +57,6 @@ typedef struct s_table
 	long			time_of_sleep;
 }   				t_table;
 
-void		print_struct(t_table *t);
 long long	get_the_current(t_time time);
 long		ft_atoi(const char *str);
 int			ft_isdigit(int c);
@@ -66,3 +68,6 @@ int			fill_table(t_table *table,char **args, int argc);
 void 		*routine(void *philos);
 void		eating(t_philos *p, t_table *t);
 void		monitor(t_philos *p, t_table *t);
+void		joined_thread(t_table *t, t_philos *p);
+
+#endif
