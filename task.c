@@ -46,12 +46,12 @@ void *routine(void *philos)
 {
 	t_philos *p;
 	t_table *t;
-	long long since_last_meal;
 	
 	p = (t_philos *)philos;
 	t = p->table;
 	if(p->philo_id % 2 == 0)
-		usleep(3333);
+		usleep(1000);
+
 	while (!t->death && !t->full)
 	{
 			eating(p, t);
@@ -74,19 +74,19 @@ void monitor(t_philos *p, t_table *t)
 			since_last = get_the_current(MAIL) - p[i].last_meal;
 			if (since_last >= t->time_of_die)
 			{
-				print("is deing", p[i].philo_id, t->sesstion_start);
+				print("is deing", &p[i], t->sesstion_start);
 				t->death = 1;
 			}
 			pthread_mutex_unlock(&t->check_death);
-			usleep(100);
-		
+			usleep(1000);
 			i++;
 		}
 		i = 0;
-		while (t->number_meals != 0 && i < t->number_of_philos && t->number_meals <= t->philos[i].counter)
+		while (t->number_meals != 0 && i < t->number_of_philos 
+			&& t->number_meals <= t->philos[i].counter)
 			i++;
 		if (i == t->number_of_philos)
 			t->full = 1;
-	
 		}
+		usleep(1000);
 }

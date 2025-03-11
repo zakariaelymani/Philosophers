@@ -15,29 +15,27 @@
 
 void prcise_usleep(long time_wait, t_philos *p)
 {
-    long long start;
-    
-    
-    start = get_the_current(MICRO);
-    while ((start - get_the_current(MICRO)) < time_wait)
-    {
-        if (p->table->full || p->table->death)
-            break;
-        usleep(100);
-    }
+	long long start;
+	
+	
+	start = get_the_current(MICRO);
+	while (( get_the_current(MICRO) - start) < time_wait)
+	{
+		if (p->table->full || p->table->death)
+			break;
+		usleep(100);
+	}
 }
-
-
 
 long long get_the_current(t_time time)
 {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    if (time == MAIL)
-        return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-    else if (time == MICRO)
-        return ((tv.tv_sec * 1000000) + tv.tv_usec);
-    return (tv.tv_sec + (tv.tv_usec / 1e6));
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	if (time == MAIL)
+		return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	else if (time == MICRO)
+		return ((tv.tv_sec * 1000000) + tv.tv_usec);
+	return (tv.tv_sec + (tv.tv_usec / 1e6));
 }
 
 
