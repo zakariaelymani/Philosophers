@@ -15,7 +15,7 @@
 void eating(t_philos *p, t_table *t)
 {
 	pthread_mutex_lock(&t->array_of_f[p->right_f]);
-	print("take right fork", p, t->sesstion_start);
+	print("has taken a fork", p, t->sesstion_start);
 	if (t->number_of_philos == 1)
 	{
 		prcise_usleep(t->time_of_die * 1000, p);
@@ -24,7 +24,7 @@ void eating(t_philos *p, t_table *t)
 		return ;
 	}
 	pthread_mutex_lock(&t->array_of_f[p->left_f]);
-	print("take left fork", p, t->sesstion_start);
+	print("has taken a fork", p, t->sesstion_start);
 	pthread_mutex_lock(&t->meal_lock);
 	p->last_meal = get_the_current(MAIL);
 	p->counter++;
@@ -74,7 +74,7 @@ void monitor(t_philos *p, t_table *t)
 			since_last = get_the_current(MAIL) - p[i].last_meal;
 			if (since_last >= t->time_of_die)
 			{
-				print("is deing", &p[i], t->sesstion_start);
+				print("died", &p[i], t->sesstion_start);
 				t->death = 1;
 			}
 			pthread_mutex_unlock(&t->check_death);

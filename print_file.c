@@ -34,7 +34,7 @@ void	print(char *s, t_philos *p, long long start)
 	if (!p->table->death && !p->table->full)
 	{
 		current_time = (get_the_current(MAIL) - start);
-		printf("the philo %d at %lld : %s\n", p->philo_id, current_time, s);
+		printf("%lld [%d] %s\n", current_time, p->philo_id, s);
 	}
 	pthread_mutex_unlock(&p->table->print);
 }
