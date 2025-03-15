@@ -27,13 +27,13 @@ int	fill_table(t_table *table, char **args, int argc)
 		table->number_meals = ft_atoi(args[5]);
 	else
 		table->number_meals = 0;
-	if (table->number_of_philos < 0 || table->time_of_die < 0 || 
-		table->time_of_sleep < 0 || table->time_of_eat < 0 || 
-		table->number_meals < 0 || table->number_of_philos > 200)
-		{
-			ft_putstr_fd("this is invalid input", 2);
-			return (1);
-		}
+	if (table->number_of_philos < 0 || table->time_of_die < 0
+		|| table->time_of_sleep < 0 || table->time_of_eat < 0
+		|| table->number_meals < 0 || table->number_of_philos > 200)
+	{
+		ft_putstr_fd("this is invalid input", 2);
+		return (1);
+	}
 	table->full = 0;
 	pthread_mutex_init(&table->meal_lock, NULL);
 	return (0);
@@ -41,7 +41,7 @@ int	fill_table(t_table *table, char **args, int argc)
 
 void	fill_philos(t_philos *p, t_table *t)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < t->number_of_philos)

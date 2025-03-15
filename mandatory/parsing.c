@@ -25,7 +25,7 @@ long	ft_atoi(const char *str)
 	int		i;
 	long	res;
 
-	(1) &&(i = 0, res = 0);
+	(1) && (i = 0, res = 0);
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (!str[i])
@@ -37,7 +37,7 @@ long	ft_atoi(const char *str)
 		i++;
 	}
 	if (!str[i])
-		return ( -1);
+		return (-1);
 	while (str[i])
 	{
 		if (ft_isdigit(str[i]) == 0 || res > INT_MAX)

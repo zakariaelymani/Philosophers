@@ -12,16 +12,15 @@
 
 #include "philo.h"
 
-
 void	prcise_usleep(long time_wait, t_philos *p)
 {
-	long long start;
+	long long	start;
 
 	start = get_the_current(MICRO);
-	while (( get_the_current(MICRO) - start) < time_wait)
+	while ((get_the_current(MICRO) - start) < time_wait)
 	{
 		if (p->table->full || p->table->death)
-			break;
+			break ;
 		usleep(100);
 	}
 }
@@ -38,9 +37,9 @@ long long	get_the_current(t_time time)
 	return (tv.tv_sec + (tv.tv_usec / 1e6));
 }
 
-void destroy_mutex(t_table *t)
+void	destroy_mutex(t_table *t)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	pthread_mutex_destroy(&t->meal_lock);
@@ -54,14 +53,14 @@ void destroy_mutex(t_table *t)
 	pthread_mutex_destroy(&t->start);
 }
 
-void joined_thread(t_table *t, t_philos *p)
+void	joined_thread(t_table *t, t_philos *p)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < t->number_of_philos)
 	{
-		pthread_join(p[i].threads,NULL);
+		pthread_join(p[i].threads, NULL);
 		i++;
 	}
 	destroy_mutex(t);

@@ -12,23 +12,23 @@
 
 #include "philo.h"
 
-int main(int argc, char *arg[])
+int	main(int argc, char *arg[])
 {
 	t_table		table;
 	t_philos	philo[200];
-	int 		i;
-	
+	int			i;
+
 	if (fill_table(&table, arg, argc) == 1)
 		return (1);
-	(1) && (fill_philos(philo, &table) ,i = 0);
+	(1) && (fill_philos(philo, &table), i = 0);
 	table.sesstion_start = get_the_current(MAIL);
 	while (i < table.number_of_philos)
 	{
-		if (pthread_create(&philo[i].threads,NULL, routine,&philo[i]))
-			{
-				ft_putstr_fd("error is pthread create\n", 2);
-				return (1);
-			}
+		if (pthread_create(&philo[i].threads, NULL, routine, &philo[i]))
+		{
+			ft_putstr_fd("error is pthread create\n", 2);
+			return (1);
+		}
 		pthread_mutex_lock(&table.start);
 		philo[i].last_meal = table.sesstion_start;
 		pthread_mutex_unlock(&table.start);

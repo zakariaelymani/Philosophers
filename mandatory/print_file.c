@@ -38,4 +38,3 @@ void	print(char *s, t_philos *p, long long start)
 	}
 	pthread_mutex_unlock(&p->table->print);
 }
-

@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-void eating(t_philos *p, t_table *t)
+void	eating(t_philos *p, t_table *t)
 {
 	pthread_mutex_lock(&t->array_of_f[p->right_f]);
 	print("has taken a fork", p, t->sesstion_start);
@@ -35,32 +35,31 @@ void eating(t_philos *p, t_table *t)
 	pthread_mutex_unlock(&t->array_of_f[p->right_f]);
 }
 
-void seelping(t_philos *p, t_table *t)
+void	seelping(t_philos *p, t_table *t)
 {
 	print("is sleeping", p, t->sesstion_start);
 	prcise_usleep(t->time_of_sleep * 1000, p);
 	print("is thinking", p, t->sesstion_start);
 }
 
-void *routine(void *philos)
+void	*routine(void *philos)
 {
-	t_philos *p;
-	t_table *t;
-	
+	t_philos	*p;
+	t_table		*t;
+
 	p = (t_philos *)philos;
 	t = p->table;
 	if (p->philo_id % 2 == 0)
 		usleep(1000);
-
 	while (!t->death && !t->full)
 	{
-			eating(p, t);
-			seelping(p, t);
+		eating(p, t);
+		seelping(p, t);
 	}
 	return (NULL);
 }
 
-void monitor(t_philos *p, t_table *t)
+void	monitor(t_philos *p, t_table *t)
 {
 	int			i;
 	long long	since_last;
@@ -78,13 +77,13 @@ void monitor(t_philos *p, t_table *t)
 				t->death = 1;
 			}
 			pthread_mutex_unlock(&t->check_death);
-			(1) && (usleep(1000) ,i++);
+			(1) && (usleep(1000), i++);
 		}
-		i = -1;
-		while (t->number_meals != 0 && ++i < t->number_of_philos 
+		i = 0;
+		while (t->number_meals != 0 && i < t->number_of_philos
 			&& t->number_meals <= t->philos[i].counter)
+			i++;
 		if (i == t->number_of_philos)
 			t->full = 1;
-		}
-		usleep(1000);
+	}
 }
