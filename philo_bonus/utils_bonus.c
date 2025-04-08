@@ -6,13 +6,13 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:26 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/06 19:44:06 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:28:30 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-long long	get_the_current(t_time time)
+long 	get_the_current(t_time time)
 {
 	struct timeval	tv;
 
@@ -30,8 +30,17 @@ void	prcise_usleep(long time_wait)
 
 	start = get_the_current(MICRO);
 	while ((get_the_current(MICRO) - start) < time_wait)
-	{
-		
+	{	
 		usleep(100);
 	}
+}
+
+void	print(char *s, int id, long long start, t_table *t)
+{
+	long long	current_time;
+
+	sem_wait(t->meal);
+	current_time = (get_the_current(MAIL) - start);
+	printf("%lld [%d] %s\n", current_time,id , s);
+	sem_post(t->meal);
 }

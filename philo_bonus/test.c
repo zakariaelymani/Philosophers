@@ -30,15 +30,13 @@ int main()
     int i;
     int x = 1;
 
-    s = sem_open(se, O_CREAT,0644,6);
-    while (x <= 6)
+    s = sem_open(se, O_CREAT,0644,5);
+    while (x <= 5)
     {
         i = fork();
         if (i == 0)
         {
             routine(s,x);
-			//monitor
-            sem_close(s);
             exit(0);
         }
         x++;

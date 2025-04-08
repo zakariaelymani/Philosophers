@@ -1,0 +1,58 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill_struct.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/07 10:00:48 by zel-yama          #+#    #+#             */
+/*   Updated: 2025/04/08 18:20:13 by zel-yama         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo_bonus.h"
+
+void fill_philo(t_philo *p, t_table *t)
+{
+	int i;
+
+	i = 0;
+	while (i < t->num_ph)
+	{
+		p[i].count = 0;
+		p[i].philo_id = i + 1;
+		p[i].t = t;
+		i++;
+	}
+	
+}
+void fill_that(int argc, char **argv, t_table *t, t_philo *p)
+{
+	int i;
+	
+	i = 0;
+    if (argc != 5 && argc != 6)
+        (write(2, "invalid arguments\n", 19), exit(2));
+	t->falg_d = 1;
+	t->flag_f = 1;
+	t->num_ph = ft_atoi(argv[1]);
+	t->time_d = ft_atoi(argv[2]);
+	t->time_e = ft_atoi(argv[3]);
+	t->time_s = ft_atoi(argv[4]);
+	if (argc == 6)
+		t->num_me = ft_atoi(argv[6]);
+	else
+		t->num_me = 0;
+	//table.semaph = sem_open("/semaphore", O_CREAT, 0644, table.num_ph);
+	t->death = sem_open("/death",O_CREAT, 0644, 1);
+	t->meal = sem_open("/meal", O_CREAT, 0644, 1);
+	if (t->death == SEM_FAILED || t->meal == SEM_FAILED)
+		(write(2, "error in semphore create \n", 27), exit(1));
+	if (t->time_d < 0 || t->time_s < 0 || t->time_s < 0
+		|| t->num_me < 0 || t->num_ph <  0 || t->num_ph > 200 )
+		(write(2, "invalid arguments\n", 19), exit(2));
+	fill_philo(p, t);
+	t->philos = p;
+}
+
+
