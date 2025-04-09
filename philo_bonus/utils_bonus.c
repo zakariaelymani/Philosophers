@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:26 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/08 16:28:30 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:10:57 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,15 @@ long 	get_the_current(t_time time)
 	return (tv.tv_sec + (tv.tv_usec / 1e6));
 }
 
-void	prcise_usleep(long time_wait)
+void	prcise_usleep(long time_wait, t_table *t)
 {
 	long long	start;
 
 	start = get_the_current(MICRO);
 	while ((get_the_current(MICRO) - start) < time_wait)
-	{	
+	{
+		if(t->flag_d)
+			break;	
 		usleep(100);
 	}
 }
@@ -40,7 +42,10 @@ void	print(char *s, int id, long long start, t_table *t)
 	long long	current_time;
 
 	sem_wait(t->meal);
-	current_time = (get_the_current(MAIL) - start);
-	printf("%lld [%d] %s\n", current_time,id , s);
+	if (!t->flag_d)
+	{
+		current_time = (get_the_current(MAIL) - start);
+		printf("%lld [%d] %s\n", current_time,id , s);
+	}
 	sem_post(t->meal);
 }

@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:10:59 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/10 16:00:21 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:06:11 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	eating(t_philos *p, t_table *t)
 	{
 		prcise_usleep(t->time_of_die * 1000, p);
 		pthread_mutex_unlock(&t->array_of_f[p->right_f]);
-		t->death = 0;
+		t->death = 1;
 		return ;
 	}
 	pthread_mutex_lock(&t->array_of_f[p->left_f]);

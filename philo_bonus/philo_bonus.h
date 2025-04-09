@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:38:22 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/08 16:29:03 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:01:16 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <semaphore.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <stdatomic.h>
 
 typedef enum s_time
 {
@@ -49,16 +50,15 @@ typedef struct s_table
 	sem_t		*semaph;
 	sem_t		*meal;
 	sem_t		*death;
+	sem_t		*eating;
 	char		*name_s;
 	t_philo		*philos;
-	int			falg_d;
-	int			flag_f;
-	
+	atomic_int 	flag_d;
 }	t_table;
 
 long	    ft_atoi(const char *str);
 long 		get_the_current(t_time time);
-void	    prcise_usleep(long time_wait);
+void	    prcise_usleep(long time_wait, t_table *t);
 void		fill_that(int argc, char **argv, t_table *t, t_philo *p);
 void		print(char *s,int id ,long long start, t_table *t);
 void		routine(t_philo *p);
