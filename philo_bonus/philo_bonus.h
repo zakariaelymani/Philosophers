@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:38:22 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/09 17:01:16 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:54:18 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ long	    ft_atoi(const char *str);
 long 		get_the_current(t_time time);
 void	    prcise_usleep(long time_wait, t_table *t);
 void		fill_that(int argc, char **argv, t_table *t, t_philo *p);
-void		print(char *s,int id ,long long start, t_table *t);
+void		print(char *s,int id ,long  start, t_table *t);
 void		routine(t_philo *p);
+void		exit_function(t_table *t);
 
 #endif

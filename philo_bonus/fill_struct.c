@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 10:00:48 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/09 15:20:10 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:42:27 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ void fill_philo(t_philo *p, t_table *t)
 }
 void fill_that(int argc, char **argv, t_table *t, t_philo *p)
 {
-	int i;
-	
-	i = 0;
     if (argc != 5 && argc != 6)
         (write(2, "invalid arguments\n", 19), exit(2));
 	t->flag_d = 0;
@@ -42,10 +39,12 @@ void fill_that(int argc, char **argv, t_table *t, t_philo *p)
 		t->num_me = ft_atoi(argv[5]);
 	else
 		t->num_me = 0;
+	t->semaph = sem_open("/semaphore", O_CREAT, 0644, t->num_ph);
 	t->eating = sem_open("/eating",O_CREAT, 0644, 1);
 	t->death = sem_open("/death",O_CREAT, 0644, 1);
 	t->meal = sem_open("/meal", O_CREAT, 0644, 1);
-	if (t->death == SEM_FAILED || t->meal == SEM_FAILED || t->eating == SEM_FAILED)
+	if (t->death == SEM_FAILED || t->meal == SEM_FAILED 
+		|| t->eating == SEM_FAILED || t->semaph == SEM_FAILED)
 		(write(2, "error in semphore create \n", 27), exit(1));
 	if (t->time_d < 0 || t->time_s < 0 || t->time_s < 0
 		|| t->num_me < 0 || t->num_ph <  0 || t->num_ph > 200 )

@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:31 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/09 16:27:02 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:41:43 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void routine(t_philo *p)
     t = p->t;
     p->last_meal = t->start;
     pthread_create(&p->monitor, NULL, monitor, (void *)p);
-	// if (p->philo_id % 2 == 0)
-	// 	usleep(1000);
+	if (p->philo_id % 2 == 0)
+		usleep(1000);
     while (!t->flag_d)
     {
     	eating(p, t);
