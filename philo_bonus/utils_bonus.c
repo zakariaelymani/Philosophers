@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:26 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/10 16:32:09 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:29:29 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,39 +41,50 @@ void	print(char *s, int id, long start, t_table *t)
 {
 	long	current_time;
 
-	sem_wait(t->meal);
+	my_sem_wait(t->meal);
 	if (!t->flag_d)
 	{
 		current_time = (get_the_current(MAIL) - start);
 		printf("%ld [%d] %s\n", current_time, id, s);
 	}
-	sem_post(t->meal);
+	my_sem_post(t->meal);
 }
-
-void	exit_function(t_table *t)
+void destroy_all(t_table *t)
 {
-	int		i;
-	int		status;
-	pid_t	dead_pid;
+	int i;
 
 	i = 0;
-	dead_pid = waitpid(-1, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+	while (i < t->num_ph)
 	{
-		i = 0;
-		while (i < t->num_ph)
-		{
-			if (t->philos[i].pid != dead_pid)
-				kill(t->philos[i].pid, SIGTERM);
-			i++;
-		}
+		kill(t->philos[i].pid, SIGTERM);
+		i++;
 	}
+	sem_close(t->full);
 	sem_close(t->eating);
 	sem_close(t->death);
 	sem_close(t->meal);
 	sem_close(t->semaph);
+	sem_unlink("/full");
 	sem_unlink("/eating");
 	sem_unlink("/semaphore");
 	sem_unlink("/death");
 	sem_unlink("/meal");
+}
+
+void	exit_function(t_table *t)
+{
+	
+	 waitpid(-1, NULL, 0);
+	my_sem_wait(t->meal);
+	destroy_all(t);
+
+	
+}
+void my_sem_wait(sem_t *se)
+{
+	if (sem_wait(se) == -1)
+	{
+		write(2, "sem_wiat failed \n", 18);
+		exit(1);
+	}
 }

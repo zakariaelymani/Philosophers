@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:38:22 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/11 18:50:57 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/12 18:21:15 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_table
 	long		time_s;
 	int			num_ph;
 	int			num_me;
+	sem_t		*full;
 	sem_t		*semaph;
 	sem_t		*meal;
 	sem_t		*death;
@@ -63,5 +64,7 @@ void		fill_that(int argc, char **argv, t_table *t, t_philo *p);
 void		print(char *s, int id, long start, t_table *t);
 void		routine(t_philo *p);
 void		exit_function(t_table *t);
+void		my_sem_post(sem_t *sem);
+void		my_sem_wait(sem_t *se);
 
 #endif

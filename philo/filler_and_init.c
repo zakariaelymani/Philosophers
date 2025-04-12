@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 07:18:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/03/09 14:22:45 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/11 15:49:05 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	fill_table(t_table *table, char **args, int argc)
 	if (argc == 6)
 		table->number_meals = ft_atoi(args[5]);
 	else
-		table->number_meals = 0;
-	if (table->number_of_philos < 0 || table->time_of_die < 0
-		|| table->time_of_sleep < 0 || table->time_of_eat < 0
-		|| table->number_meals < 0 || table->number_of_philos > 200)
+		table->number_meals = 0 ;
+	if (table->number_of_philos <= 0 || table->time_of_die < 0
+		|| table->time_of_sleep < 60 || table->time_of_eat < 60
+		|| (argc == 6 && table->number_meals <= 0) || table->number_of_philos > 200)
 	{
 		ft_putstr_fd("this is invalid input", 2);
 		return (1);
