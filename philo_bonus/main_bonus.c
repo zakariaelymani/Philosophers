@@ -6,15 +6,15 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/10 10:21:04 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/10 16:21:52 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void start(t_table *t)
+void	start(t_table *t)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	t->start = get_the_current(MAIL);
@@ -28,14 +28,14 @@ void start(t_table *t)
 	}
 }
 
-int main(int argc, char *argv[])
+int	main(int argc, char *argv[])
 {
-    t_table table;
-    t_philo philo[200];
+	t_table	table;
+	t_philo	philo[200];
 	int		i;
-	
+
 	i = 0;
-    fill_that(argc, argv, &table, philo);
+	fill_that(argc, argv, &table, philo);
 	start(&table);
 	exit_function(&table);
 }

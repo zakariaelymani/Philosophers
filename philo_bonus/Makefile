@@ -1,6 +1,6 @@
 NAME = philo_bonus 
 FILES = parsing_bonus.c task_bonus.c utils_bonus.c main_bonus.c fill_struct.c
-FLAGES =  -Wall -Werror -Wextra -pthread -fsanitize=address
+FLAGES =  -Wall -Werror -Wextra -fsanitize=thread -pthread 
 cc = cc 
 OBJ = $(FILES:.c=.o)
 RM = rm -rf
