@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:26 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/12 19:29:29 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:56:33 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,6 @@ void	print(char *s, int id, long start, t_table *t)
 }
 void destroy_all(t_table *t)
 {
-	int i;
-
-	i = 0;
-	while (i < t->num_ph)
-	{
-		kill(t->philos[i].pid, SIGTERM);
-		i++;
-	}
 	sem_close(t->full);
 	sem_close(t->eating);
 	sem_close(t->death);
@@ -73,12 +65,20 @@ void destroy_all(t_table *t)
 
 void	exit_function(t_table *t)
 {
+	int status;
+	int	i;
 	
-	 waitpid(-1, NULL, 0);
-	my_sem_wait(t->meal);
+	i = 0;
+	waitpid(-1, &status, 0);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+	{
+		while (i < t->num_ph)
+		{
+			kill(t->philos[i].pid, SIGKILL);
+			i++;
+		}
+	}
 	destroy_all(t);
-
-	
 }
 void my_sem_wait(sem_t *se)
 {

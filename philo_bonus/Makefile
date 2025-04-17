@@ -1,6 +1,6 @@
 NAME = philo_bonus 
 FILES = parsing_bonus.c task_bonus.c utils_bonus.c main_bonus.c fill_struct.c
-FLAGES =  -Wall -Werror -Wextra -fsanitize=thread -pthread 
+FLAGES =  -Wall -Werror -Wextra
 cc = cc 
 OBJ = $(FILES:.c=.o)
 RM = rm -rf
@@ -12,7 +12,7 @@ HEADER = philo_bonus.h
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(cc) $(FLAGES) $(OBJ) -o $(NAME) -lpthread
+	$(cc) $(FLAGES) $(OBJ) -o $(NAME) 
 
 clean:
 	$(RM) $(OBJ)

@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:31 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/12 19:25:35 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:54:10 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,16 @@ void my_sem_post(sem_t *sem)
 	}
 }
 
-void	eating(t_philo *p)
+void	eating(t_philo *p, t_table *t)
 {
-	t_table *t;
-
-	t = p->t;
+	
 	my_sem_wait(p->t->semaph);
 	print("has taken a fork", p->philo_id, t->start, t);
 	if (t->num_ph == 1)
 	{
 		prcise_usleep(p->t->time_d * 1000, t);
 		t->flag_d = 1;
+		my_sem_post(p->t->semaph);
 		return ;
 	}
 	my_sem_wait(p->t->semaph);
@@ -54,14 +53,17 @@ void	sleeping(t_philo *p, t_table *t)
 }
 int is_full(int number_meal, int count, t_table *t)
 {
+	int res;
+
+	res = 0;
 	my_sem_wait(t->full);
 	if(number_meal != 0 && count >= number_meal)
 	{
 		my_sem_post(t->full);
-		return (1);
+		res = 1;
 	}
 	my_sem_post(t->full);
-	return (0);
+	return (res);
 }
 
 void	*monitor(void *philo)
@@ -80,7 +82,6 @@ void	*monitor(void *philo)
 		{
 			print("died ", p->philo_id, t->start, t);
 			t->flag_d = 1;
-			my_sem_post(t->eating);
 			exit(1);
 		}
 		my_sem_post(t->death);
@@ -102,7 +103,7 @@ void	routine(t_philo *p)
 		usleep(1000);
 	while (!t->flag_d)
 	{
-		eating(p);
+		eating(p, t);
 		if (is_full(t->num_me, p->count, t) == 1)
 			break ;
 		sleeping(p, t);
