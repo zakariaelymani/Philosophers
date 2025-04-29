@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:58:25 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/07 12:08:38 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:02:45 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char *arg[])
 		if (pthread_create(&philo[i].threads, NULL, routine, &philo[i]))
 		{
 			ft_putstr_fd("error is pthread create\n", 2);
+			destroy_mutex(&table);
 			return (1);
 		}
 		pthread_mutex_lock(&table.start);

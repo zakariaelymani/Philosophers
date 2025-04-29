@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/10 10:16:16 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/26 09:31:14 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	joined_thread(t_table *t, t_philos *p)
 	i = 0;
 	while (i < t->number_of_philos)
 	{
-		pthread_join(p[i].threads, NULL);
+		if (pthread_join(p[i].threads, NULL))
+			break ;
 		i++;
 	}
 	destroy_mutex(t);

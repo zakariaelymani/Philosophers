@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:26 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/16 16:56:33 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:42:19 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,17 @@ void	print(char *s, int id, long start, t_table *t)
 {
 	long	current_time;
 
-	my_sem_wait(t->meal);
+	sem_wait(t->meal);
 	if (!t->flag_d)
 	{
 		current_time = (get_the_current(MAIL) - start);
 		printf("%ld [%d] %s\n", current_time, id, s);
 	}
-	my_sem_post(t->meal);
+	sem_post(t->meal);
 }
-void destroy_all(t_table *t)
+
+void	destroy_all(t_table *t)
 {
-	sem_close(t->full);
 	sem_close(t->eating);
 	sem_close(t->death);
 	sem_close(t->meal);
@@ -65,11 +65,12 @@ void destroy_all(t_table *t)
 
 void	exit_function(t_table *t)
 {
-	int status;
+	int	status;
 	int	i;
-	
+
 	i = 0;
-	waitpid(-1, &status, 0);
+	if (waitpid(-1, &status, 0) == -1)
+		(write(2, "waited fialed \n", 16), exit(2));
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
 	{
 		while (i < t->num_ph)
@@ -79,12 +80,4 @@ void	exit_function(t_table *t)
 		}
 	}
 	destroy_all(t);
-}
-void my_sem_wait(sem_t *se)
-{
-	if (sem_wait(se) == -1)
-	{
-		write(2, "sem_wiat failed \n", 18);
-		exit(1);
-	}
 }
