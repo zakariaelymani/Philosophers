@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:10:59 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/09 13:06:11 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:14:02 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,18 @@ void	eating(t_philos *p, t_table *t)
 	print("has taken a fork", p, t->sesstion_start);
 	if (t->number_of_philos == 1)
 	{
-		prcise_usleep(t->time_of_die * 1000, p);
+		prcise_usleep(t->time_of_die * 1000 + 1000, p);
 		pthread_mutex_unlock(&t->array_of_f[p->right_f]);
-		t->death = 1;
 		return ;
 	}
 	pthread_mutex_lock(&t->array_of_f[p->left_f]);
 	print("has taken a fork", p, t->sesstion_start);
 	pthread_mutex_lock(&t->meal_lock);
 	p->last_meal = get_the_current(MAIL);
-	p->counter++;
 	pthread_mutex_unlock(&t->meal_lock);
+	pthread_mutex_lock(&t->countr);
+	p->counter++;
+	pthread_mutex_unlock(&t->countr);
 	print("is eating", p, t->sesstion_start);
 	prcise_usleep(t->time_of_eat * 1000, p);
 	pthread_mutex_unlock(&t->array_of_f[p->left_f]);
@@ -51,7 +52,7 @@ void	*routine(void *philos)
 	t = p->table;
 	if (p->philo_id % 2 == 0)
 		usleep(1000);
-	while (!t->death && !t->full)
+	while (!is_maat(t))
 	{
 		eating(p, t);
 		seelping(p, t);
@@ -59,31 +60,57 @@ void	*routine(void *philos)
 	return (NULL);
 }
 
-void	monitor(t_philos *p, t_table *t)
+void	check_is_full(t_table *t, t_philos *p, int *falg)
+{
+	int	i;
+	int	counter;
+	int	x;
+
+	x = 0;
+	i = 0;
+	while (i < t->number_of_philos && !is_maat(t))
+	{
+		pthread_mutex_lock(&t->countr);
+		counter = p[i].counter;
+		pthread_mutex_unlock(&t->countr);
+		if (t->number_meals != 0 && counter >= t->number_meals)
+			x++;
+		i++;
+	}
+	pthread_mutex_lock(&t->is_full);
+	if (x == t->number_of_philos)
+		*falg = 1;
+	pthread_mutex_unlock(&t->is_full);
+}
+
+void	*monitor(void *arg)
 {
 	int			i;
 	long long	since_last;
+	t_table		*t;
+	t_philos	*p;
 
-	while (!t->death && !t->full)
+	t = (t_table *)arg;
+	p = t->philos;
+	while (!is_maat(t))
 	{
 		i = 0;
-		while (i < t->number_of_philos && !t->death)
+		while (i < t->number_of_philos && !is_maat(t))
 		{
-			pthread_mutex_lock(&t->check_death);
+			pthread_mutex_lock(&t->meal_lock);
 			since_last = get_the_current(MAIL) - p[i].last_meal;
+			pthread_mutex_unlock(&t->meal_lock);
+			pthread_mutex_lock(&t->check_death);
 			if (since_last >= t->time_of_die)
 			{
 				print("died", &p[i], t->sesstion_start);
+				pthread_mutex_unlock(&t->check_death);
 				t->death = 1;
 			}
 			pthread_mutex_unlock(&t->check_death);
-			(1) && (usleep(1000), i++);
-		}
-		i = 0;
-		while (t->number_meals != 0 && i < t->number_of_philos
-			&& t->number_meals <= t->philos[i].counter)
 			i++;
-		if (i == t->number_of_philos)
-			t->full = 1;
+		}
+		(check_is_full(t, p, &t->full), usleep(1000));
 	}
+	return (NULL);
 }

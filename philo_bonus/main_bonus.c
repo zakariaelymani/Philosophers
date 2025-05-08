@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/29 11:41:17 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:45:40 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	start(t_table *t)
 		if (t->philos[i].pid == 0)
 		{
 			routine(&t->philos[i]);
+			destroy_all(t);
+			exit(0);
 		}
 	}
 }

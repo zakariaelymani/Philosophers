@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/26 09:31:14 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:36:29 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	prcise_usleep(long time_wait, t_philos *p)
 	start = get_the_current(MICRO);
 	while ((get_the_current(MICRO) - start) < time_wait)
 	{
-		if (p->table->full || p->table->death)
+		if (is_maat(p->table))
 			break ;
 		usleep(333);
 	}
@@ -65,4 +65,23 @@ void	joined_thread(t_table *t, t_philos *p)
 		i++;
 	}
 	destroy_mutex(t);
+}
+
+int	is_maat(t_table *t)
+{
+	pthread_mutex_lock(&t->check_death);
+	if (t->death)
+	{
+		pthread_mutex_unlock(&t->check_death);
+		return (1);
+	}
+	pthread_mutex_unlock(&t->check_death);
+	pthread_mutex_lock(&t->is_full);
+	if (t->full)
+	{
+		pthread_mutex_unlock(&t->is_full);
+		return (1);
+	}
+	pthread_mutex_unlock(&t->is_full);
+	return (0);
 }

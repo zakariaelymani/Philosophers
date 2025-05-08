@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:31 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/29 11:41:43 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/07 09:39:45 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	eating(t_philo *p, t_table *t)
 	if (t->num_ph == 1)
 	{
 		prcise_usleep(p->t->time_d * 1000, t);
-		t->flag_d = 1;
 		sem_post(p->t->semaph);
 		return ;
 	}
@@ -59,6 +58,7 @@ void	*monitor(void *philo)
 			print("died ", p->philo_id, t->start, t);
 			t->flag_d = 1;
 			sem_wait(t->meal);
+			destroy_all(t);
 			exit(1);
 		}
 		sem_post(t->death);
@@ -87,7 +87,6 @@ void	routine(t_philo *p)
 		}
 		sleeping(p, t);
 	}
-	if (pthread_join(p->monitor, NULL))
+	if (pthread_detach(p->monitor))
 		exit(1);
-	exit(0);
 }

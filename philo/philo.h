@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 17:50:49 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/29 11:52:37 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:34:32 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ typedef struct s_table
 	pthread_mutex_t	meal_lock;
 	pthread_mutex_t	check_death;
 	pthread_mutex_t	print;
-	pthread_mutex_t	start;
+	pthread_mutex_t	start;	
+	pthread_mutex_t	countr;
+	pthread_mutex_t	is_full;
 	int				full;
 	int				number_meals;
 	long			time_of_eat;
@@ -66,8 +68,8 @@ void		prcise_usleep(long time_wait, t_philos *p);
 int			fill_table(t_table *table, char **args, int argc);
 void		*routine(void *philos);
 void		eating(t_philos *p, t_table *t);
-void		monitor(t_philos *p, t_table *t);
+void		*monitor(void *arg);
 void		joined_thread(t_table *t, t_philos *p);
 void		destroy_mutex(t_table *t);
-
+int			is_maat(t_table *t);
 #endif

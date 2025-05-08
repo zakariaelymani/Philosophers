@@ -2,7 +2,7 @@ NAME = philo
 FILES = filler_and_init.c  main.c parsing.c print_file.c \
 task.c utils.c 
 header =  philo.h
-FLAGES = -Wall -Werror -Wextra -pthread
+FLAGES = -Wall -Werror -Wextra -pthread -fsanitize=thread
 cc = cc
 OBJ = $(FILES:.c=.o)
 RM = rm -rf

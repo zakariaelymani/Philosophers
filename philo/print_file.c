@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:44:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/04/29 11:47:27 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:14:33 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print(char *s, t_philos *p, long long start)
 	long long	current_time;
 
 	pthread_mutex_lock(&p->table->print);
-	if (!p->table->death && !p->table->full)
+	if (!is_maat(p->table))
 	{
 		current_time = (get_the_current(MAIL) - start);
 		printf("%lld [%d] %s\n", current_time, p->philo_id, s);
