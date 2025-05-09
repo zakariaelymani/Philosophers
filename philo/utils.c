@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 09:01:53 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/05/06 15:36:29 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:14:28 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	joined_thread(t_table *t, t_philos *p)
 			break ;
 		i++;
 	}
+	pthread_join(t->tabel_thread, NULL);
 	destroy_mutex(t);
 }
 

@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 17:50:49 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/05/06 15:34:32 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:19:05 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ long		ft_atoi(const char *str);
 int			ft_isdigit(int c);
 void		ft_putstr_fd(char *s, int fd);
 void		print(char *s, t_philos *p, long long start);
-void		fill_philos(t_philos *p, t_table *t);
+int			fill_philos(t_philos *p, t_table *t);
 void		prcise_usleep(long time_wait, t_philos *p);
 int			fill_table(t_table *table, char **args, int argc);
 void		*routine(void *philos);
@@ -72,4 +72,5 @@ void		*monitor(void *arg);
 void		joined_thread(t_table *t, t_philos *p);
 void		destroy_mutex(t_table *t);
 int			is_maat(t_table *t);
+void		check_is_death(t_table *t, t_philos *p, int i, int since_last);
 #endif

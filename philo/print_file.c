@@ -6,11 +6,27 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 14:44:39 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/05/08 11:14:33 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:15:39 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	check_is_death(t_table *t, t_philos *p, int i, int since_last)
+{
+	pthread_mutex_lock(&t->meal_lock);
+	since_last = get_the_current(MAIL) - p[i].last_meal;
+	pthread_mutex_unlock(&t->meal_lock);
+	pthread_mutex_lock(&t->check_death);
+	if (since_last >= t->time_of_die)
+	{
+		print("died", &p[i], t->sesstion_start);
+		pthread_mutex_lock(&t->print);
+		t->death = 1;
+		pthread_mutex_unlock(&t->print);
+	}
+	pthread_mutex_unlock(&t->check_death);
+}
 
 void	ft_putstr_fd(char *s, int fd)
 {
@@ -31,7 +47,7 @@ void	print(char *s, t_philos *p, long long start)
 	long long	current_time;
 
 	pthread_mutex_lock(&p->table->print);
-	if (!is_maat(p->table))
+	if (!p->table->full && !p->table->death)
 	{
 		current_time = (get_the_current(MAIL) - start);
 		printf("%lld [%d] %s\n", current_time, p->philo_id, s);

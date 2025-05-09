@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 08:10:59 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/05/08 11:14:02 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:15:43 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	eating(t_philos *p, t_table *t)
 	print("has taken a fork", p, t->sesstion_start);
 	if (t->number_of_philos == 1)
 	{
-		prcise_usleep(t->time_of_die * 1000 + 1000, p);
+		prcise_usleep(t->time_of_die * 1000 + 2000, p);
 		pthread_mutex_unlock(&t->array_of_f[p->right_f]);
 		return ;
 	}
@@ -77,10 +77,12 @@ void	check_is_full(t_table *t, t_philos *p, int *falg)
 			x++;
 		i++;
 	}
+	pthread_mutex_lock(&t->print);
 	pthread_mutex_lock(&t->is_full);
-	if (x == t->number_of_philos)
+	if (x == t->number_of_philos && t->number_meals != 0)
 		*falg = 1;
 	pthread_mutex_unlock(&t->is_full);
+	pthread_mutex_unlock(&t->print);
 }
 
 void	*monitor(void *arg)
@@ -92,22 +94,14 @@ void	*monitor(void *arg)
 
 	t = (t_table *)arg;
 	p = t->philos;
+	since_last = 0;
 	while (!is_maat(t))
 	{
 		i = 0;
 		while (i < t->number_of_philos && !is_maat(t))
 		{
-			pthread_mutex_lock(&t->meal_lock);
-			since_last = get_the_current(MAIL) - p[i].last_meal;
-			pthread_mutex_unlock(&t->meal_lock);
-			pthread_mutex_lock(&t->check_death);
-			if (since_last >= t->time_of_die)
-			{
-				print("died", &p[i], t->sesstion_start);
-				pthread_mutex_unlock(&t->check_death);
-				t->death = 1;
-			}
-			pthread_mutex_unlock(&t->check_death);
+			check_is_death(t, p, i, since_last);
+			usleep(1000);
 			i++;
 		}
 		(check_is_full(t, p, &t->full), usleep(1000));

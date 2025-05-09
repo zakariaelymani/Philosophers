@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 19:41:31 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/05/07 09:39:45 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:32:47 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,10 @@ void	*monitor(void *philo)
 			print("died ", p->philo_id, t->start, t);
 			t->flag_d = 1;
 			sem_wait(t->meal);
-			destroy_all(t);
 			exit(1);
 		}
 		sem_post(t->death);
-		usleep(100);
+		usleep(1000);
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: zel-yama <zel-yama@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 16:58:25 by zel-yama          #+#    #+#             */
-/*   Updated: 2025/05/06 15:32:07 by zel-yama         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:17:48 by zel-yama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,15 @@ int	main(int argc, char *arg[])
 
 	if (fill_table(&table, arg, argc) == 1)
 		return (1);
-	(1) && (fill_philos(philo, &table), i = 0);
+	if (fill_philos(philo, &table) == 1)
+		return (1);
+	i = 0;
 	table.sesstion_start = get_the_current(MAIL);
 	while (i < table.number_of_philos)
 	{
 		if (pthread_create(&philo[i].threads, NULL, routine, &philo[i]))
 		{
-			ft_putstr_fd("error is pthread create\n", 2);
-			destroy_mutex(&table);
+			(ft_putstr_fd("error in creating\n", 2), destroy_mutex(&table));
 			return (1);
 		}
 		pthread_mutex_lock(&table.start);
@@ -36,7 +37,6 @@ int	main(int argc, char *arg[])
 		i++;
 	}
 	pthread_create(&table.tabel_thread, NULL, monitor, &table);
-	pthread_join(table.tabel_thread, NULL);
 	joined_thread(&table, philo);
 	return (0);
 }
